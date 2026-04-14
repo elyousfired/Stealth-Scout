@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: stealth-scout-v17
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.0.0
+      - key: PORT
+        value: 10000
+    autoDeploy: true
