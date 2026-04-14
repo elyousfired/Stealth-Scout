@@ -474,8 +474,8 @@ process.on('uncaughtException', (err) => {
   console.error('\x1b[31m[ANTI-CRASH] Uncaught Exception thrown:\x1b[0m', err);
 });
 
-const PORT = 4000;
-server.listen(PORT, () => {
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`\x1b[32m🦅 Crosse Stealth Scout V8 Pro listening on port ${PORT}\x1b[0m`);
   initBinanceWS();
   setTimeout(startStealthScanner, 5000);
