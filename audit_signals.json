@@ -1,0 +1,776 @@
+[
+  {
+    "symbol": "BTCUSDT",
+    "time": "04-07T20:00",
+    "entry": 69399.8,
+    "peak": 72858.5,
+    "gain": 4.983731941590605,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BTCUSDT",
+    "time": "04-09T15:30",
+    "entry": 72045.3,
+    "peak": 73450,
+    "gain": 1.9497455073405163,
+    "range": 3.111132578540538,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "time": "04-07T21:00",
+    "entry": 2141.09,
+    "peak": 2273,
+    "gain": 6.1608806729282675,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "RAVEUSDT",
+    "time": "04-07T00:15",
+    "entry": 0.25542,
+    "peak": 0.30307,
+    "gain": 18.655547725315177,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "RAVEUSDT",
+    "time": "04-07T08:45",
+    "entry": 0.25284,
+    "peak": 0.32255,
+    "gain": 27.57079576016453,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "SOLUSDT",
+    "time": "04-10T12:30",
+    "entry": 84.07,
+    "peak": 85.66,
+    "gain": 1.8912810752944018,
+    "range": 3.0999552483421455,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "TAOUSDT",
+    "time": "04-07T21:00",
+    "entry": 321.45,
+    "peak": 351.04,
+    "gain": 9.205164100171109,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XAGUSDT",
+    "time": "04-07T08:00",
+    "entry": 72.73,
+    "peak": 77.65,
+    "gain": 6.764746322012927,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XAGUSDT",
+    "time": "04-07T19:45",
+    "entry": 72.89,
+    "peak": 77.65,
+    "gain": 6.530388256276589,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XAGUSDT",
+    "time": "04-10T05:30",
+    "entry": 76.01,
+    "peak": 76.88,
+    "gain": 1.144586238652796,
+    "range": 4.340424098356658,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "XAGUSDT",
+    "time": "04-10T13:00",
+    "entry": 76.13,
+    "peak": 76.88,
+    "gain": 0.9851569683436229,
+    "range": 4.333582499882959,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "XAUUSDT",
+    "time": "04-07T08:15",
+    "entry": 4677,
+    "peak": 4854.98,
+    "gain": 3.805430831729732,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XAUUSDT",
+    "time": "04-09T15:30",
+    "entry": 4787.49,
+    "peak": 4799,
+    "gain": 0.24041825674832154,
+    "range": 2.3729414565606697,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "DOGEUSDT",
+    "time": "04-07T19:45",
+    "entry": 0.09225,
+    "peak": 0.09602,
+    "gain": 4.086720867208667,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XRPUSDT",
+    "time": "04-07T22:00",
+    "entry": 1.3406,
+    "peak": 1.3959,
+    "gain": 4.125018648366396,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "HYPEUSDT",
+    "time": "04-07T19:45",
+    "entry": 37.162,
+    "peak": 39.794,
+    "gain": 7.082503632743118,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "HYPEUSDT",
+    "time": "04-09T07:00",
+    "entry": 38.851,
+    "peak": 42.247,
+    "gain": 8.741087745489178,
+    "range": 4.6115816387948305,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "FFUSDT",
+    "time": "04-07T19:30",
+    "entry": 0.07064,
+    "peak": 0.07283,
+    "gain": 3.1002265005662677,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FFUSDT",
+    "time": "04-09T03:00",
+    "entry": 0.07155,
+    "peak": 0.07283,
+    "gain": 1.7889587700908502,
+    "range": 2.014457556602421,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FFUSDT",
+    "time": "04-10T03:30",
+    "entry": 0.07154,
+    "peak": 0.1715,
+    "gain": 139.72602739726028,
+    "range": 2.0257040431734787,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FFUSDT",
+    "time": "04-10T17:45",
+    "entry": 0.07343,
+    "peak": 0.1715,
+    "gain": 133.5557673975215,
+    "range": 1.973564854264343,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "1000PEPEUSDT",
+    "time": "04-07T21:00",
+    "entry": 0.0035402,
+    "peak": 0.0037847,
+    "gain": 6.906389469521507,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "1000PEPEUSDT",
+    "time": "04-10T19:00",
+    "entry": 0.0036773,
+    "peak": 0.003702,
+    "gain": 0.6716884670818235,
+    "range": 4.399751777542633,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "DASHUSDT",
+    "time": "04-07T09:00",
+    "entry": 30.81,
+    "peak": 34.04,
+    "gain": 10.483609217786436,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "DASHUSDT",
+    "time": "04-09T18:15",
+    "entry": 33.04,
+    "peak": 45.86,
+    "gain": 38.80145278450363,
+    "range": 6.87337167740537,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "BNBUSDT",
+    "time": "04-07T09:00",
+    "entry": 604.49,
+    "peak": 625.38,
+    "gain": 3.455805720524738,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BNBUSDT",
+    "time": "04-07T17:30",
+    "entry": 605.26,
+    "peak": 625.38,
+    "gain": 3.3241912566500353,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "WLFIUSDT",
+    "time": "04-07T22:45",
+    "entry": 0.1,
+    "peak": 0.1012,
+    "gain": 1.1999999999999926,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "SIRENUSDT",
+    "time": "04-07T00:30",
+    "entry": 0.59916,
+    "peak": 0.64991,
+    "gain": 8.470191601575532,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "SIRENUSDT",
+    "time": "04-07T20:45",
+    "entry": 0.59577,
+    "peak": 0.64299,
+    "gain": 7.925877435923247,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "MAGMAUSDT",
+    "time": "04-07T21:00",
+    "entry": 0.10382,
+    "peak": 0.1542,
+    "gain": 48.52629551146216,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "MAGMAUSDT",
+    "time": "04-08T06:15",
+    "entry": 0.10479,
+    "peak": 0.1866,
+    "gain": 78.07042656742055,
+    "range": 1.79815032149613,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "NOMUSDT",
+    "time": "04-07T09:45",
+    "entry": 0.005124,
+    "peak": 0.007846,
+    "gain": 53.12256049960968,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "AVAXUSDT",
+    "time": "04-09T15:45",
+    "entry": 9.336,
+    "peak": 9.7,
+    "gain": 3.898886032562114,
+    "range": 5.231781513958166,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "AVAXUSDT",
+    "time": "04-10T12:15",
+    "entry": 9.343,
+    "peak": 9.56,
+    "gain": 2.3225944557422724,
+    "range": 5.227861737591077,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "ADAUSDT",
+    "time": "04-07T22:00",
+    "entry": 0.2546,
+    "peak": 0.2663,
+    "gain": 4.595443833464253,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "ADAUSDT",
+    "time": "04-09T22:15",
+    "entry": 0.2581,
+    "peak": 0.2588,
+    "gain": 0.2712127082526069,
+    "range": 3.466962235363563,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "ADAUSDT",
+    "time": "04-10T19:00",
+    "entry": 0.2576,
+    "peak": 0.2588,
+    "gain": 0.46583850931676196,
+    "range": 3.473691587528477,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "SUIUSDT",
+    "time": "04-07T21:00",
+    "entry": 0.9085,
+    "peak": 0.9783,
+    "gain": 7.682993946064939,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "SUIUSDT",
+    "time": "04-09T21:00",
+    "entry": 0.9448,
+    "peak": 0.9698,
+    "gain": 2.646062658763762,
+    "range": 5.351754968911374,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "SUIUSDT",
+    "time": "04-10T06:00",
+    "entry": 0.9436,
+    "peak": 0.9623,
+    "gain": 1.9817719372615568,
+    "range": 5.3585609311439875,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "SUIUSDT",
+    "time": "04-10T14:15",
+    "entry": 0.9452,
+    "peak": 0.9623,
+    "gain": 1.8091409225560733,
+    "range": 5.349490155128509,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "币安人生USDT",
+    "time": "04-07T16:30",
+    "entry": 0.07202,
+    "peak": 0.10733,
+    "gain": 49.02804776450985,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "币安人生USDT",
+    "time": "04-08T04:00",
+    "entry": 0.07169,
+    "peak": 0.10733,
+    "gain": 49.71404658948248,
+    "range": 0.19708228730483277,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "NEARUSDT",
+    "time": "04-07T21:00",
+    "entry": 1.289,
+    "peak": 1.391,
+    "gain": 7.9131109387121885,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PAXGUSDT",
+    "time": "04-07T08:15",
+    "entry": 4661.06,
+    "peak": 4833.45,
+    "gain": 3.698514930080269,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PAXGUSDT",
+    "time": "04-07T17:30",
+    "entry": 4656.23,
+    "peak": 4833.45,
+    "gain": 3.8060834623719244,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PAXGUSDT",
+    "time": "04-09T13:30",
+    "entry": 4760.28,
+    "peak": 4786.9,
+    "gain": 0.5592108027258879,
+    "range": 2.378830844518494,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "LINKUSDT",
+    "time": "04-07T22:30",
+    "entry": 9.048,
+    "peak": 9.417,
+    "gain": 4.078249336870024,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "MONUSDT",
+    "time": "04-07T21:45",
+    "entry": 0.02865,
+    "peak": 0.03352,
+    "gain": 16.998254799301932,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "ARBUSDT",
+    "time": "04-07T19:45",
+    "entry": 0.0969,
+    "peak": 0.1065,
+    "gain": 9.907120743034053,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "WLDUSDT",
+    "time": "04-07T17:45",
+    "entry": 0.2517,
+    "peak": 0.275,
+    "gain": 9.25705204608663,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "TRADOORUSDT",
+    "time": "04-08T13:00",
+    "entry": 3.377,
+    "peak": 5.12,
+    "gain": 51.61385845424935,
+    "range": 3.577906913849234,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "TSLAUSDT",
+    "time": "04-07T23:15",
+    "entry": 359.79,
+    "peak": 365.74,
+    "gain": 1.6537424608799545,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "DOTUSDT",
+    "time": "04-10T14:15",
+    "entry": 1.305,
+    "peak": 1.326,
+    "gain": 1.6091954022988606,
+    "range": 3.989960375684081,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "CFGUSDT",
+    "time": "04-07T00:15",
+    "entry": 0.1654,
+    "peak": 0.1856,
+    "gain": 12.212817412333735,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "TRUMPUSDT",
+    "time": "04-07T21:45",
+    "entry": 2.93,
+    "peak": 3.077,
+    "gain": 5.017064846416375,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "TRUMPUSDT",
+    "time": "04-09T12:15",
+    "entry": 3.014,
+    "peak": 3.03,
+    "gain": 0.5308560053085606,
+    "range": 4.096041412970201,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-07T01:15",
+    "entry": 0.006063,
+    "peak": 0.006133,
+    "gain": 1.1545439551377308,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-07T06:45",
+    "entry": 0.005879,
+    "peak": 0.006133,
+    "gain": 4.320462663718332,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-07T12:30",
+    "entry": 0.0059,
+    "peak": 0.006133,
+    "gain": 3.9491525423728913,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-07T18:30",
+    "entry": 0.005899,
+    "peak": 0.006133,
+    "gain": 3.9667740294965372,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-08T02:00",
+    "entry": 0.005907,
+    "peak": 0.006741,
+    "gain": 14.118842051802941,
+    "range": 1.3446100508894656,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-09T07:45",
+    "entry": 0.005888,
+    "peak": 0.01021,
+    "gain": 73.40353260869566,
+    "range": 2.8952740860985644,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BASUSDT",
+    "time": "04-09T13:45",
+    "entry": 0.006039,
+    "peak": 0.01021,
+    "gain": 69.06772644477563,
+    "range": 2.822880248211351,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "LPTUSDT",
+    "time": "04-07T23:15",
+    "entry": 2.072,
+    "peak": 2.088,
+    "gain": 0.7722007722007729,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "LPTUSDT",
+    "time": "04-10T13:15",
+    "entry": 2.081,
+    "peak": 2.745,
+    "gain": 31.907736665064878,
+    "range": 3.8907816328455502,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "ILVUSDT",
+    "time": "04-07T22:30",
+    "entry": 3.726,
+    "peak": 3.988,
+    "gain": 7.031669350509931,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FILUSDT",
+    "time": "04-07T21:00",
+    "entry": 0.881,
+    "peak": 0.929,
+    "gain": 5.4483541430193005,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FILUSDT",
+    "time": "04-09T19:00",
+    "entry": 0.904,
+    "peak": 0.926,
+    "gain": 2.433628318584073,
+    "range": 3.583113221855585,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "FILUSDT",
+    "time": "04-10T04:15",
+    "entry": 0.906,
+    "peak": 0.918,
+    "gain": 1.3245033112582794,
+    "range": 3.5752034796439833,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "FILUSDT",
+    "time": "04-10T11:15",
+    "entry": 0.903,
+    "peak": 0.918,
+    "gain": 1.6611295681063138,
+    "range": 3.5870812320680496,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "PARTIUSDT",
+    "time": "04-07T06:00",
+    "entry": 0.08291,
+    "peak": 0.08953,
+    "gain": 7.984561572789774,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PARTIUSDT",
+    "time": "04-07T11:45",
+    "entry": 0.08288,
+    "peak": 0.09109,
+    "gain": 9.905888030888041,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PARTIUSDT",
+    "time": "04-08T21:00",
+    "entry": 0.08836,
+    "peak": 0.09709,
+    "gain": 9.880036215482122,
+    "range": 2.759694722231582,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PUMPUSDT",
+    "time": "04-07T09:00",
+    "entry": 0.001738,
+    "peak": 0.001883,
+    "gain": 8.342922899884922,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "PUMPUSDT",
+    "time": "04-09T15:30",
+    "entry": 0.001811,
+    "peak": 0.001892,
+    "gain": 4.472667034787418,
+    "range": 4.15597104646549,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "TNSRUSDT",
+    "time": "04-07T22:30",
+    "entry": 0.0365,
+    "peak": 0.05769,
+    "gain": 58.05479452054795,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "AAVEUSDT",
+    "time": "04-07T23:00",
+    "entry": 95.88,
+    "peak": 97.09,
+    "gain": 1.2619941593658823,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FETUSDT",
+    "time": "04-07T09:00",
+    "entry": 0.2384,
+    "peak": 0.2583,
+    "gain": 8.3473154362416,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "FETUSDT",
+    "time": "04-07T21:00",
+    "entry": 0.2429,
+    "peak": 0.2583,
+    "gain": 6.340057636887596,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XPLUSDT",
+    "time": "04-07T20:30",
+    "entry": 0.1233,
+    "peak": 0.1337,
+    "gain": 8.434712084347126,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "XPLUSDT",
+    "time": "04-10T02:00",
+    "entry": 0.1291,
+    "peak": 0.1346,
+    "gain": 4.260263361735093,
+    "range": 4.767013715467784,
+    "type": "SIGNAL"
+  },
+  {
+    "symbol": "BCHUSDT",
+    "time": "04-07T20:00",
+    "entry": 436.83,
+    "peak": 449.55,
+    "gain": 2.9118879197857352,
+    "range": 0,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BCHUSDT",
+    "time": "04-09T07:00",
+    "entry": 444.95,
+    "peak": 446.66,
+    "gain": 0.38431284413979916,
+    "range": 1.9509319452570673,
+    "type": "GOLDEN"
+  },
+  {
+    "symbol": "BCHUSDT",
+    "time": "04-10T01:30",
+    "entry": 445.12,
+    "peak": 446.65,
+    "gain": 0.34372753414808876,
+    "range": 1.950186846338363,
+    "type": "GOLDEN"
+  }
+]
