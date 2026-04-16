@@ -60,8 +60,8 @@ let livePrices = new Map<string, { price: number; change24h: number }>();
 let resultsMap = new Map<string, TokenInfo>(); 
 let tickerScanQueue: any[] = [];
 let performanceStats = {
-  daily: { vip: 0, pump: 0 },
-  weekly: { vip: 0, pump: 0 }
+  daily: { vip: 0, pump: 0, vipCount: 0, pumpCount: 0 },
+  weekly: { vip: 0, pump: 0, vipCount: 0, pumpCount: 0 }
 };
 
 // Load Sticky
@@ -94,15 +94,14 @@ function updatePerformanceStats() {
   }
   const weekStartTs = weekStart.getTime();
 
-  let dailyVip = 0, dailyPump = 0;
-  let weeklyVip = 0, weeklyPump = 0;
+  let dailyVip = 0, dailyPump = 0, dailyVipCount = 0, dailyPumpCount = 0;
+  let weeklyVip = 0, weeklyPump = 0, weeklyVipCount = 0, weeklyPumpCount = 0;
 
-  // 1. History from Audit
+  // 1. History from Audit (If any archived this week)
   if (fs.existsSync(AUDIT_FILE)) {
     try {
       const auditData = JSON.parse(fs.readFileSync(AUDIT_FILE, 'utf-8'));
       auditData.forEach((s: any) => {
-        // Crude date parsing for audit_signals "MM-DDTHH:mm" format
         const [month, rest] = s.time ? s.time.split('-') : ['0', ''];
         const day = rest.split('T')[0];
         const signalDate = new Date(2026, parseInt(month)-1, parseInt(day));
@@ -110,39 +109,43 @@ function updatePerformanceStats() {
         
         if (sigTs >= weekStartTs) {
           const gain = s.gain || 0;
-          if (s.type === 'PUMP' || s.isFreshBreakout) weeklyPump += gain;
-          else weeklyVip += gain;
-          
-          if (sigTs >= todayStartTs) {
-            if (s.type === 'PUMP' || s.isFreshBreakout) dailyPump += gain;
-            else dailyVip += gain;
+          if (s.type === 'PUMP' || s.isFreshBreakout) {
+            weeklyPump += gain;
+            weeklyPumpCount++;
+            if (sigTs >= todayStartTs) { dailyPump += gain; dailyPumpCount++; }
+          } else {
+            weeklyVip += gain;
+            weeklyVipCount++;
+            if (sigTs >= todayStartTs) { dailyVip += gain; dailyVipCount++; }
           }
         }
       });
     } catch (e) {}
   }
 
-  // 2. Current Sticky Tokens
+  // 2. Current Sticky Tokens (Live Floating PnL)
   stickyTokens.forEach(s => {
     if (s.crossTime && s.pnlFromCross !== undefined) {
       const sigTs = new Date(s.crossTime).getTime();
       const pnl = s.pnlFromCross;
 
       if (sigTs >= weekStartTs) {
-        if (s.isFreshBreakout) weeklyPump += pnl;
-        else weeklyVip += pnl;
-
-        if (sigTs >= todayStartTs) {
-          if (s.isFreshBreakout) dailyPump += pnl;
-          else dailyVip += pnl;
+        if (s.isFreshBreakout) {
+          weeklyPump += pnl;
+          weeklyPumpCount++;
+          if (sigTs >= todayStartTs) { dailyPump += pnl; dailyPumpCount++; }
+        } else {
+          weeklyVip += pnl;
+          weeklyVipCount++;
+          if (sigTs >= todayStartTs) { dailyVip += pnl; dailyVipCount++; }
         }
       }
     }
   });
 
   performanceStats = {
-    daily: { vip: dailyVip, pump: dailyPump },
-    weekly: { weeklyVip, weeklyPump } // Fixed naming convention for emitting
+    daily: { vip: dailyVip, pump: dailyPump, vipCount: dailyVipCount, pumpCount: dailyPumpCount },
+    weekly: { vip: weeklyVip, pump: weeklyPump, vipCount: weeklyVipCount, pumpCount: weeklyPumpCount }
   };
   io.emit('performance_stats', performanceStats);
 }
@@ -479,10 +482,11 @@ async function startStealthScanner() {
             entryPrice: sticky.entryPrice
           };
           
-          if (tokenInfo.entryPrice) {
-            tokenInfo.pnlFromCross = ((currentPrice - tokenInfo.entryPrice) / tokenInfo.entryPrice) * 100;
+          if (sticky.entryPrice) {
+            tokenInfo.pnlFromCross = ((currentPrice - sticky.entryPrice) / sticky.entryPrice) * 100;
             // Also update the pnl on the sticky object itself
             stickyTokens[sIndex].pnlFromCross = tokenInfo.pnlFromCross;
+            stickyTokens[sIndex].price = currentPrice; // Sync price too
           }
           await saveStickyTokens();
         } else if ((status === 'golden' || status === 'sniper') && sIndex === -1) {

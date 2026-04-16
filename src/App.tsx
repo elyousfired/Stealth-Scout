@@ -34,8 +34,8 @@ interface ScannerStatus {
 }
 
 interface PerformanceStats {
-  daily: { vip: number; pump: number };
-  weekly: { weeklyVip: number; weeklyPump: number };
+  daily: { vip: number; pump: number; vipCount: number; pumpCount: number };
+  weekly: { vip: number; pump: number; vipCount: number; pumpCount: number };
 }
 
 const socket: Socket = io(import.meta.env.PROD ? '/' : 'http://localhost:4000');
@@ -48,8 +48,8 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [scannerStatus, setScannerStatus] = useState<ScannerStatus | null>(null);
   const [perfStats, setPerfStats] = useState<PerformanceStats>({
-    daily: { vip: 0, pump: 0 },
-    weekly: { weeklyVip: 0, weeklyPump: 0 }
+    daily: { vip: 0, pump: 0, vipCount: 0, pumpCount: 0 },
+    weekly: { vip: 0, pump: 0, vipCount: 0, pumpCount: 0 }
   });
 
   useEffect(() => {
@@ -179,27 +179,39 @@ const App: React.FC = () => {
             <section style={{ marginBottom: '2.5rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
                 <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid var(--golden)', background: 'rgba(234, 179, 8, 0.05)' }}>
-                  <div style={{ color: 'var(--golden)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>VIP DAILY PNL</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ color: 'var(--golden)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>VIP DAILY PNL</div>
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontWeight: '900' }}>{perfStats.daily.vipCount} TRADES</div>
+                  </div>
                   <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.daily.vip >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
                     {perfStats.daily.vip >= 0 ? '+' : ''}{perfStats.daily.vip.toFixed(2)}%
                   </div>
                 </div>
                 <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid var(--golden)', background: 'rgba(234, 179, 8, 0.05)' }}>
-                  <div style={{ color: 'var(--golden)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>VIP WEEKLY PNL</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.weekly.weeklyVip >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
-                    {perfStats.weekly.weeklyVip >= 0 ? '+' : ''}{perfStats.weekly.weeklyVip.toFixed(2)}%
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ color: 'var(--golden)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>VIP WEEKLY PNL</div>
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontWeight: '900' }}>{perfStats.weekly.vipCount} TRADES</div>
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.weekly.vip >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
+                    {perfStats.weekly.vip >= 0 ? '+' : ''}{perfStats.weekly.vip.toFixed(2)}%
                   </div>
                 </div>
                 <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid #22c55e', background: 'rgba(34, 197, 94, 0.05)' }}>
-                  <div style={{ color: '#22c55e', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>PUMP DAILY PNL</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ color: '#22c55e', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>PUMP DAILY PNL</div>
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontWeight: '900' }}>{perfStats.daily.pumpCount} TRADES</div>
+                  </div>
                   <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.daily.pump >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
                     {perfStats.daily.pump >= 0 ? '+' : ''}{perfStats.daily.pump.toFixed(2)}%
                   </div>
                 </div>
                 <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid #22c55e', background: 'rgba(34, 197, 94, 0.05)' }}>
-                  <div style={{ color: '#22c55e', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>PUMP WEEKLY PNL</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.weekly.weeklyPump >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
-                    {perfStats.weekly.weeklyPump >= 0 ? '+' : ''}{perfStats.weekly.weeklyPump.toFixed(2)}%
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ color: '#22c55e', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>PUMP WEEKLY PNL</div>
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontWeight: '900' }}>{perfStats.weekly.pumpCount} TRADES</div>
+                  </div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.weekly.pump >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
+                    {perfStats.weekly.pump >= 0 ? '+' : ''}{perfStats.weekly.pump.toFixed(2)}%
                   </div>
                 </div>
               </div>
