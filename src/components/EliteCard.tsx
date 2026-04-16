@@ -13,6 +13,7 @@ interface TokenInfo {
   entryPrice?: number;
   pnlFromCross?: number;
   crossTime?: string;
+  volumeRatio?: number;
   history?: { vwap: number; ema: number; price: number }[];
 }
 
@@ -50,6 +51,11 @@ const EliteCard: React.FC<Props> = ({ token }) => {
             {token.isInsideStructure && (
               <div className="badge" style={{ background: 'rgba(16, 185, 129, 0.2)', color: 'var(--success)', border: '1px solid var(--success)' }}>
                 ⚖️ EQ
+              </div>
+            )}
+            {token.volumeRatio !== undefined && (
+              <div className="badge" style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid #38bdf8' }}>
+                📊 VOL {token.volumeRatio.toFixed(1)}x
               </div>
             )}
           </div>
@@ -99,7 +105,7 @@ const EliteCard: React.FC<Props> = ({ token }) => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>
-           DETECTED: <span style={{ color: '#fff' }}>{token.crossTime ? token.crossTime.split('T')[1].slice(0, 5) : '--:--'}</span>
+           DETECTED: <span style={{ color: '#fff' }}>{token.crossTime ? new Date(token.crossTime).toLocaleDateString([], { month: '2-digit', day: '2-digit' }) + ' ' + new Date(token.crossTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : '--/-- --:--'}</span>
         </div>
         <a 
           href={`https://www.tradingview.com/chart/?symbol=BINANCE:${token.symbol}`} 

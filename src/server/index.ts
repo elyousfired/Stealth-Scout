@@ -48,6 +48,8 @@ interface TokenInfo {
   pnlFromCross?: number;
   lastUpdated?: string;
   crossTime?: string;
+  volumeRatio?: number;
+  isFreshBreakout?: boolean;
   history?: { vwap: number; ema: number; price: number }[];
 }
 
@@ -189,10 +191,14 @@ async function startStealthScanner() {
       // Use live prices map keys as source symbols (avoids REST API 429/418 bans)
       const symbolsFromWS = Array.from(livePrices.keys());
       if (symbolsFromWS.length > 0) {
-        // Sort them roughly to ensure major pairs are scanned frequently
-        tickerScanQueue = symbolsFromWS
-          .map(s => ({ symbol: s, lastPrice: livePrices.get(s)?.price || 0 }))
-          .slice(0, 400); 
+        // PRIORITY: Prioritize stickyTokens symbols so their metadata (Volume/PnL) updates immediately on startup
+        const stickySymbols = new Set(stickyTokens.map(s => s.symbol));
+        const fullList = symbolsFromWS.map(s => ({ symbol: s, lastPrice: livePrices.get(s)?.price || 0 }));
+        
+        const priorityList = fullList.filter(t => stickySymbols.has(t.symbol));
+        const normalList = fullList.filter(t => !stickySymbols.has(t.symbol));
+        
+        tickerScanQueue = [...priorityList, ...normalList].slice(0, 400); 
       } else {
         // Fallback to REST only if WS hasn't received anything yet
         tickerScanQueue = await fetchTopTickers();
@@ -285,9 +291,28 @@ async function startStealthScanner() {
         const isBelowCeiling = vwapDaily <= (finalWMax + (finalWMax * 0.001));
 
         // CHECK PREVIOUS CLOSED CANDLE (15m)
-        // candles[last] is usually the forming candle, candles[last-1] is the last closed one
         const lastClosedCandle = candles.length >= 2 ? candles[candles.length - 2] : null;
+        const prevClosedCandle = candles.length >= 3 ? candles[candles.length - 3] : null;
+        const prevClosedCandle2 = candles.length >= 4 ? candles[candles.length - 4] : null;
+        
         const didCloseAboveMax = lastClosedCandle ? lastClosedCandle.close > finalWMax : false;
+
+        // PUMP CHANCE LOGIC: 1st or 2nd candle close above max
+        let isFreshBreakout = false;
+        if (didCloseAboveMax) {
+          const firstCandleAbove = lastClosedCandle && (!prevClosedCandle || prevClosedCandle.close <= finalWMax);
+          const secondCandleAbove = lastClosedCandle && prevClosedCandle && (prevClosedCandle.close > finalWMax) && (!prevClosedCandle2 || prevClosedCandle2.close <= finalWMax);
+          isFreshBreakout = firstCandleAbove || secondCandleAbove;
+        }
+
+        // VISUAL ONLY: VOLUME RATIO (V17.2)
+        let volumeRatio = 0;
+        if (candles.length >= 22) {
+          const prevCandlesForAvg = candles.slice(-22, -2);
+          const avgVolume = prevCandlesForAvg.reduce((sum, c) => sum + c.volume, 0) / 20;
+          const breakoutVolume = lastClosedCandle ? lastClosedCandle.volume : 0;
+          volumeRatio = avgVolume > 0 ? breakoutVolume / avgVolume : 0;
+        }
 
         let status: 'under' | 'over' | 'golden' | 'sniper' = 'under';
         
@@ -297,8 +322,7 @@ async function startStealthScanner() {
         if (isBullish && isPending && didCloseAboveMax) {
           // PROMOTION: From Watchlist to VIP Elite
           status = (weeklyRange < 0.03) ? 'sniper' : 'golden';
-          console.log(`\x1b[32m[VIP BREAKOUT] ${symbol} closed above Weekly Max! Promoting to Elite.\x1b[0m`);
-          // Once it becomes VIP, we remove it from pending and it goes to sticky
+          console.log(`\x1b[32m[VIP BREAKOUT] ${symbol} closed above (Pure Price Action). Promoting. [Visual Vol: ${volumeRatio.toFixed(2)}x]\x1b[0m`);
           pendingHunts.delete(symbol);
         } else if (isFirstCross && isBelowCeiling) {
           // INITIAL SCOUT: Add to Watchlist and track for breakout
@@ -345,6 +369,8 @@ async function startStealthScanner() {
           change24h: liveData ? liveData.change24h : Number(t.priceChangePercent),
           status,
           isInsideStructure,
+          isFreshBreakout, // Added for V17.5 UI
+          volumeRatio: volumeRatio, // Visual meta only
           lastUpdated: new Date().toISOString(),
           history: historyData
         };
@@ -368,22 +394,30 @@ async function startStealthScanner() {
         // UPDATE ELITE: If it is already in elite, update its live data (Price, PnL)
         if (sIndex !== -1) {
           const sticky = stickyTokens[sIndex];
-          const originalStatus = sticky.status; // PRESERVE THE STATUS (Golden/Sniper)
+          const originalStatus = sticky.status; 
           
-          tokenInfo.crossTime = sticky.crossTime;
-          tokenInfo.entryPrice = sticky.entryPrice;
+          // Update the sticky object but KEEP the original Elite status and Fresh flag if it already has it
+          stickyTokens[sIndex] = { 
+            ...tokenInfo, 
+            status: originalStatus, 
+            isFreshBreakout: sticky.isFreshBreakout || tokenInfo.isFreshBreakout,
+            crossTime: sticky.crossTime,
+            entryPrice: sticky.entryPrice
+          };
+          
           if (tokenInfo.entryPrice) {
             tokenInfo.pnlFromCross = ((currentPrice - tokenInfo.entryPrice) / tokenInfo.entryPrice) * 100;
+            // Also update the pnl on the sticky object itself
+            stickyTokens[sIndex].pnlFromCross = tokenInfo.pnlFromCross;
           }
-          
-          // Update the sticky object but KEEP the original Elite status
-          stickyTokens[sIndex] = { ...tokenInfo, status: originalStatus };
+          await saveStickyTokens();
         } else if ((status === 'golden' || status === 'sniper') && sIndex === -1) {
           tokenInfo.crossTime = new Date().toISOString();
           tokenInfo.entryPrice = currentPrice;
+          tokenInfo.pnlFromCross = 0;
           stickyTokens.push(tokenInfo);
           await saveStickyTokens();
-          console.log(`\x1b[35m[ELITE] ${status.toUpperCase()} signal for ${symbol} @ ${currentPrice}\x1b[0m`);
+          console.log(`\x1b[35m[ELITE/PUMP] ${status.toUpperCase()} signal for ${symbol} @ ${currentPrice}\x1b[0m`);
           sendTelegramAlert(tokenInfo);
         }
 

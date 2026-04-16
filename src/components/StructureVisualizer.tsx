@@ -81,10 +81,11 @@ const StructureVisualizer: React.FC<StructureVisualizerProps> = ({
       {/* EMA 50 Line */}
       <polyline
         fill="none"
-        stroke="rgba(255,255,255,0.2)"
-        strokeWidth="1"
+        stroke="#22c55e"
+        strokeWidth="2"
         strokeLinejoin="round"
         points={emaPath}
+        style={{ filter: 'drop-shadow(0 0 2px rgba(34, 197, 94, 0.4))' }}
       />
 
       {/* Price Line (Amber/Yellow) */}
