@@ -33,6 +33,11 @@ interface ScannerStatus {
   total: number;
 }
 
+interface PerformanceStats {
+  daily: { vip: number; pump: number };
+  weekly: { weeklyVip: number; weeklyPump: number };
+}
+
 const socket: Socket = io(import.meta.env.PROD ? '/' : 'http://localhost:4000');
 
 const App: React.FC = () => {
@@ -42,6 +47,10 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'signals' | 'watchlist'>('signals');
   const [loading, setLoading] = useState(true);
   const [scannerStatus, setScannerStatus] = useState<ScannerStatus | null>(null);
+  const [perfStats, setPerfStats] = useState<PerformanceStats>({
+    daily: { vip: 0, pump: 0 },
+    weekly: { weeklyVip: 0, weeklyPump: 0 }
+  });
 
   useEffect(() => {
     socket.on('tokens', (data: TokenInfo[]) => {
@@ -51,11 +60,13 @@ const App: React.FC = () => {
     socket.on('sticky_updates', (data: TokenInfo[]) => setStickyTokens(data));
     socket.on('pending_updates', (data: TokenInfo[]) => setPendingTokens(data));
     socket.on('scanner_status', (data: ScannerStatus) => setScannerStatus(data));
+    socket.on('performance_stats', (data: PerformanceStats) => setPerfStats(data));
     return () => {
       socket.off('tokens');
       socket.off('sticky_updates');
       socket.off('pending_updates');
       socket.off('scanner_status');
+      socket.off('performance_stats');
     };
   }, []);
 
@@ -164,6 +175,36 @@ const App: React.FC = () => {
         {/* CONDITIONALLY RENDER CONTENT BASED ON TAB */}
         {activeTab === 'signals' ? (
           <>
+            {/* PERFORMANCE TRACKER SECTION (V17.12) */}
+            <section style={{ marginBottom: '2.5rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+                <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid var(--golden)', background: 'rgba(234, 179, 8, 0.05)' }}>
+                  <div style={{ color: 'var(--golden)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>VIP DAILY PNL</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.daily.vip >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
+                    {perfStats.daily.vip >= 0 ? '+' : ''}{perfStats.daily.vip.toFixed(2)}%
+                  </div>
+                </div>
+                <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid var(--golden)', background: 'rgba(234, 179, 8, 0.05)' }}>
+                  <div style={{ color: 'var(--golden)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>VIP WEEKLY PNL</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.weekly.weeklyVip >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
+                    {perfStats.weekly.weeklyVip >= 0 ? '+' : ''}{perfStats.weekly.weeklyVip.toFixed(2)}%
+                  </div>
+                </div>
+                <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid #22c55e', background: 'rgba(34, 197, 94, 0.05)' }}>
+                  <div style={{ color: '#22c55e', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>PUMP DAILY PNL</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.daily.pump >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
+                    {perfStats.daily.pump >= 0 ? '+' : ''}{perfStats.daily.pump.toFixed(2)}%
+                  </div>
+                </div>
+                <div className="glass-card" style={{ padding: '1.25rem', border: '1px solid #22c55e', background: 'rgba(34, 197, 94, 0.05)' }}>
+                  <div style={{ color: '#22c55e', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>PUMP WEEKLY PNL</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: (perfStats.weekly.weeklyPump >= 0 ? 'var(--success)' : 'var(--danger)'), marginTop: '0.25rem' }}>
+                    {perfStats.weekly.weeklyPump >= 0 ? '+' : ''}{perfStats.weekly.weeklyPump.toFixed(2)}%
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* LIVE SCANNER BAR */}
             {scannerStatus && (
               <div className="glass-card" style={{ 

@@ -59,6 +59,10 @@ let pendingHunts = new Map<string, TokenInfo>(); // Tokens tracked for breakout
 let livePrices = new Map<string, { price: number; change24h: number }>();
 let resultsMap = new Map<string, TokenInfo>(); 
 let tickerScanQueue: any[] = [];
+let performanceStats = {
+  daily: { vip: 0, pump: 0 },
+  weekly: { vip: 0, pump: 0 }
+};
 
 // Load Sticky
 if (fs.existsSync(STICKY_FILE)) {
@@ -70,7 +74,77 @@ if (fs.existsSync(STICKY_FILE)) {
 function saveStickyTokens() {
   try {
     fs.writeFileSync(STICKY_FILE, JSON.stringify(stickyTokens, null, 2));
+    updatePerformanceStats(); // Recalculate whenever sticky tokens change
   } catch (e) {}
+}
+
+const AUDIT_FILE = path.join(process.cwd(), 'audit_signals.json');
+
+function updatePerformanceStats() {
+  const now = new Date();
+  const todayStartTs = new Date(now).setUTCHours(0,0,0,0);
+  
+  let weekStart = new Date(now);
+  weekStart.setUTCHours(0,0,0,0);
+  const currentDay = now.getUTCDay();
+  if (currentDay === 1 || currentDay === 2) {
+    weekStart.setUTCDate(weekStart.getUTCDate() - (currentDay === 1 ? 1 : 2));
+  } else {
+    weekStart.setUTCDate(weekStart.getUTCDate() - (currentDay === 0 ? 6 : currentDay - 1));
+  }
+  const weekStartTs = weekStart.getTime();
+
+  let dailyVip = 0, dailyPump = 0;
+  let weeklyVip = 0, weeklyPump = 0;
+
+  // 1. History from Audit
+  if (fs.existsSync(AUDIT_FILE)) {
+    try {
+      const auditData = JSON.parse(fs.readFileSync(AUDIT_FILE, 'utf-8'));
+      auditData.forEach((s: any) => {
+        // Crude date parsing for audit_signals "MM-DDTHH:mm" format
+        const [month, rest] = s.time ? s.time.split('-') : ['0', ''];
+        const day = rest.split('T')[0];
+        const signalDate = new Date(2026, parseInt(month)-1, parseInt(day));
+        const sigTs = signalDate.getTime();
+        
+        if (sigTs >= weekStartTs) {
+          const gain = s.gain || 0;
+          if (s.type === 'PUMP' || s.isFreshBreakout) weeklyPump += gain;
+          else weeklyVip += gain;
+          
+          if (sigTs >= todayStartTs) {
+            if (s.type === 'PUMP' || s.isFreshBreakout) dailyPump += gain;
+            else dailyVip += gain;
+          }
+        }
+      });
+    } catch (e) {}
+  }
+
+  // 2. Current Sticky Tokens
+  stickyTokens.forEach(s => {
+    if (s.crossTime && s.pnlFromCross !== undefined) {
+      const sigTs = new Date(s.crossTime).getTime();
+      const pnl = s.pnlFromCross;
+
+      if (sigTs >= weekStartTs) {
+        if (s.isFreshBreakout) weeklyPump += pnl;
+        else weeklyVip += pnl;
+
+        if (sigTs >= todayStartTs) {
+          if (s.isFreshBreakout) dailyPump += pnl;
+          else dailyVip += pnl;
+        }
+      }
+    }
+  });
+
+  performanceStats = {
+    daily: { vip: dailyVip, pump: dailyPump },
+    weekly: { weeklyVip, weeklyPump } // Fixed naming convention for emitting
+  };
+  io.emit('performance_stats', performanceStats);
 }
 
 // --- WEBSOCKET CLIENT ---
@@ -432,6 +506,7 @@ async function startStealthScanner() {
         io.emit('tokens', allResults);
         io.emit('pending_updates', Array.from(pendingHunts.values()));
         io.emit('sticky_updates', stickyTokens);
+        updatePerformanceStats(); // Emit stats updates
         renderTerminalDashboard(allResults, stickyTokens);
       }
     } catch (e: any) {
@@ -498,6 +573,7 @@ io.on('connection', (socket) => {
   socket.emit('sticky_updates', stickyTokens);
   socket.emit('pending_updates', Array.from(pendingHunts.values()));
   socket.emit('tokens', Array.from(resultsMap.values()));
+  socket.emit('performance_stats', performanceStats);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
