@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import TokenTable from '@/components/TokenTable';
 import EliteCard from '@/components/EliteCard';
@@ -52,15 +52,59 @@ const App: React.FC = () => {
     weekly: { vip: 0, pump: 0, vipCount: 0, pumpCount: 0 }
   });
 
+  // Notifications State & Deduplication (V17.15)
+  const notifiedRef = useRef<Set<string>>(new Set());
+  const [notifPermission, setNotifPermission] = useState<NotificationPermission>(
+    typeof Notification !== 'undefined' ? Notification.permission : 'default'
+  );
+
+  const requestPermission = async () => {
+    if (typeof Notification === 'undefined') return;
+    const res = await Notification.requestPermission();
+    setNotifPermission(res);
+  };
+
+  const sendAlert = (token: TokenInfo) => {
+    if (notifPermission !== 'granted' || notifiedRef.current.has(token.symbol)) return;
+
+    const isPump = token.isFreshBreakout;
+    const title = isPump ? `🚀 PUMP ALERT: ${token.symbol}` : `🦅 VIP SIGNAL: ${token.symbol}`;
+    const body = `Price: $${token.price.toLocaleString()} | Status: ${token.status.toUpperCase()}\nDetected at: ${new Date().toLocaleTimeString()}`;
+
+    try {
+      new Notification(title, {
+        body,
+        icon: 'https://cdn-icons-png.flaticon.com/512/2504/2504814.png', // Generic indicator icon
+        silent: false
+      });
+      notifiedRef.current.add(token.symbol);
+    } catch (err) {
+      console.error('Notification error:', err);
+    }
+  };
+
+
   useEffect(() => {
     socket.on('tokens', (data: TokenInfo[]) => {
       setTokens(data);
       setLoading(false);
     });
-    socket.on('sticky_updates', (data: TokenInfo[]) => setStickyTokens(data));
+    
+    socket.on('sticky_updates', (data: TokenInfo[]) => {
+      // Check for genuinely new tokens to alert
+      data.forEach(token => {
+        if (!notifiedRef.current.has(token.symbol)) {
+          sendAlert(token);
+        }
+      });
+      setStickyTokens(data);
+    });
+
     socket.on('pending_updates', (data: TokenInfo[]) => setPendingTokens(data));
     socket.on('scanner_status', (data: ScannerStatus) => setScannerStatus(data));
     socket.on('performance_stats', (data: PerformanceStats) => setPerfStats(data));
+
+    // Cleanup notified list periodically or keep it for the session
     return () => {
       socket.off('tokens');
       socket.off('sticky_updates');
@@ -68,7 +112,8 @@ const App: React.FC = () => {
       socket.off('scanner_status');
       socket.off('performance_stats');
     };
-  }, []);
+  }, [notifPermission]); // Re-bind alerts logic if permission changes
+
 
   const clearSticky = async () => {
     await fetch('/api/clear-sticky', { method: 'POST' });
@@ -136,8 +181,44 @@ const App: React.FC = () => {
           <div style={{ margin: '1.5rem 0', height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
           
           <div style={{ padding: '0.75rem 1.25rem', borderRadius: '0.75rem', color: 'var(--text-dim)', fontWeight: '500', fontSize: '0.85rem', opacity: 0.5 }}>📈 PERFORMANCE</div>
-          <div style={{ padding: '0.75rem 1.25rem', borderRadius: '0.75rem', color: 'var(--text-dim)', fontWeight: '500', fontSize: '0.85rem', opacity: 0.5 }}>⚙️ PREFERENCES</div>
+          
+          <div style={{ margin: '1rem 0', padding: '0 1.25rem' }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginBottom: '0.5rem', fontWeight: '800' }}>🔔 ALERTS</div>
+            {notifPermission !== 'granted' ? (
+              <button 
+                onClick={requestPermission}
+                style={{
+                  width: '100%',
+                  padding: '0.6rem',
+                  borderRadius: '0.6rem',
+                  background: 'var(--primary)',
+                  color: '#fff',
+                  border: 'none',
+                  fontSize: '0.8rem',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                ENABLE DESKTOP ALERTS
+              </button>
+            ) : (
+              <div style={{ 
+                fontSize: '0.8rem', 
+                color: 'var(--success)', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.5rem',
+                fontWeight: 'bold',
+                padding: '0.5rem',
+                background: 'rgba(34, 197, 94, 0.1)',
+                borderRadius: '0.5rem'
+              }}>
+                ✅ ALERTS ACTIVE
+              </div>
+            )}
+          </div>
         </nav>
+
 
         <div style={{ marginTop: 'auto', padding: '1.25rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: '1.25rem', border: '1px solid rgba(99, 102, 241, 0.1)' }}>
           <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginBottom: '0.75rem', fontWeight: '800', letterSpacing: '0.05em' }}>ENGINE STATUS</div>

@@ -68,6 +68,11 @@ let performanceStats = {
 if (fs.existsSync(STICKY_FILE)) {
   try {
     stickyTokens = JSON.parse(fs.readFileSync(STICKY_FILE, 'utf-8'));
+    console.log(`[INIT] Loaded ${stickyTokens.length} sticky tokens.`);
+    // Calculate initial stats so dashboard isn't 0 on start
+    setTimeout(() => {
+        updatePerformanceStats();
+    }, 1000);
   } catch (e) {}
 }
 
@@ -147,6 +152,7 @@ function updatePerformanceStats() {
     daily: { vip: dailyVip, pump: dailyPump, vipCount: dailyVipCount, pumpCount: dailyPumpCount },
     weekly: { vip: weeklyVip, pump: weeklyPump, vipCount: weeklyVipCount, pumpCount: weeklyPumpCount }
   };
+  console.log(`[PERF] Updated: Daily VIP(${dailyVipCount}), Daily Pump(${dailyPumpCount}) | Weekly VIP(${weeklyVipCount}), Weekly Pump(${weeklyPumpCount})`);
   io.emit('performance_stats', performanceStats);
 }
 
@@ -561,11 +567,16 @@ function renderTerminalDashboard(allTokens: TokenInfo[], goldenTokens: TokenInfo
   console.log(` \x1b[90m [ENGINE] Monitoring: \x1b[33m${pendingHunts.size} Pending Breakouts\x1b[0m\n`);
 }
 
+app.get('/api/performance', (req, res) => {
+  res.json(performanceStats);
+});
+
 app.post('/api/clear-sticky', (req, res) => {
   stickyTokens = [];
   resultsMap.clear();
   saveStickyTokens();
   io.emit('sticky_updates', []);
+  updatePerformanceStats(); // Recalculate after clear
   res.json({ success: true });
 });
 
