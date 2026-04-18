@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Stealth Widget</title>
+  <style>
+    :root {
+      --bg: rgba(15, 23, 42, 0.95);
+      --border: rgba(99, 102, 241, 0.3);
+      --primary: #6366f1;
+      --text: #ffffff;
+      --text-dim: #94a3b8;
+      --success: #22c55e;
+      --warning: #eab308;
+      --danger: #ef4444;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: transparent;
+      overflow: hidden;
+      color: var(--text);
+    }
+    
+    .widget-container {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      -webkit-app-region: drag; /* Makes the window draggable */
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.2);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    
+    .title {
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .close-btn {
+      -webkit-app-region: no-drag;
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--text);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+    
+    .close-btn:hover {
+      background: var(--danger);
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--danger);
+      box-shadow: 0 0 5px var(--danger);
+    }
+    
+    .status-dot.connected {
+      background: var(--success);
+      box-shadow: 0 0 5px var(--success);
+    }
+    
+    .content {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      -webkit-app-region: no-drag;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    
+    .signal-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .signal-card.golden { border-color: var(--warning); background: rgba(234, 179, 8, 0.1); }
+    .signal-card.sniper { border-color: #a855f7; background: rgba(168, 85, 247, 0.1); }
+    .signal-card.pump { border-color: var(--success); background: rgba(34, 197, 94, 0.1); }
+    
+    .symbol {
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+    }
+    
+    .price {
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    
+    .type-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .golden .type-badge { color: var(--warning); border: 1px solid var(--warning); }
+    .sniper .type-badge { color: #a855f7; border: 1px solid #a855f7; }
+    .pump .type-badge { color: var(--success); border: 1px solid var(--success); }
+    
+    .pnl {
+      font-weight: bold;
+      font-size: 13px;
+      margin-top: 4px;
+      text-align: right;
+    }
+    .pnl.positive { color: var(--success); }
+    .pnl.negative { color: var(--danger); }
+    
+    .empty-state {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 12px;
+      padding: 30px 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget-container">
+    <div class="header">
+      <div class="title">
+        <div id="connection-dot" class="status-dot"></div>
+        🦅 Stealth Widget
+      </div>
+      <button class="close-btn" id="close-btn">✕</button>
+    </div>
+    
+    <div class="content" id="signals-container">
+      <div class="empty-state">En attente de signaux...</div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
